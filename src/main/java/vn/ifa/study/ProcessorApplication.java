@@ -1,13 +1,10 @@
 package vn.ifa.study;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.kafka.support.KafkaNull;
 import org.springframework.messaging.Message;
@@ -15,15 +12,10 @@ import org.springframework.messaging.Message;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@SpringBootApplication
-public class SpringCloudDemoApplication {
+@Configuration
+public class ProcessorApplication {
 
     public static final String HEADER_TRACE_ID = "traceId";
-
-    public static void main(final String[] args) {
-
-        SpringApplication.run(SpringCloudDemoApplication.class, args);
-    }
 
     @Bean
     KafkaNullConverter converter() {
@@ -69,16 +61,4 @@ public class SpringCloudDemoApplication {
                 .build();
     }
 
-    @Bean
-    Supplier<Message<Customer>> produceCustomer() {
-
-        return () -> MessageBuilder.withPayload(Customer.builder()
-                .customerId(UUID.randomUUID()
-                        .toString())
-                .build())
-                .setHeader(HEADER_TRACE_ID,
-                           UUID.randomUUID()
-                                   .toString())
-                .build();
-    }
 }

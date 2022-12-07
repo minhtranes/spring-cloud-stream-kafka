@@ -22,7 +22,7 @@ public class ReportApplication {
 
         Object payload = c.getPayload();
         String traceId = (String) c.getHeaders()
-                .get(SpringCloudDemoApplication.HEADER_TRACE_ID);
+                .get(ProcessorApplication.HEADER_TRACE_ID);
 
         if (!(payload instanceof Customer)) {
             store.remove(traceId);
