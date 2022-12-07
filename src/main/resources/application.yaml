@@ -1,0 +1,54 @@
+spring.cloud:
+    function.definition: produceCustomer;processCustomer;report
+    stream:
+        default-binder: kafka
+        kafka:
+            binder:
+                brokers: ${KAFKA_BOOTSTRAP_SERVERS:10.10.15.85:32092}
+                consumerProperties:
+                    max.poll.records: 5
+            bindings:
+                report-in-0:
+                    consumer:
+                        configuration:
+                            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                processCustomer-in-0:
+                    consumer:
+                        configuration:
+                            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                processCustomer-out-0:
+                    producer:
+                        configuration:
+                            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                        messageKeyExpression: headers['traceId']
+                        topic.properties:
+                            cleanup.policy: compact
+                            segment.ms: 300000 # 5 minutes
+                            segment.bytes: 1048576 # 1 MB
+                produceCustomer-out-0:
+                    producer:
+                        configuration:
+                            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                        messageKeyExpression: headers['traceId']
+                        topic.properties:
+                            cleanup.policy: compact
+                            segment.ms: 300000 # 5 minutes
+                            segment.bytes: 1048576 # 1 MB
+        bindings:
+            report-in-0:
+                group: reporter
+                destination: customers
+                startOffset: earliest                        
+                batch-mode: true
+            processCustomer-in-0:
+                group: researcher
+                destination: customers
+                startOffset: latest                         
+                batch-mode: false
+            processCustomer-out-0:
+                group: researcher
+                destination: customers
+                startOffset: latest
+            produceCustomer-out-0:
+                destination: customers
+                contentType: application/json
