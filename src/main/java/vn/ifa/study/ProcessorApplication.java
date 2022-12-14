@@ -16,12 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ProcessorApplication {
 
     public static final String HEADER_TRACE_ID = "traceId";
-
-    @Bean
-    KafkaNullConverter converter() {
-
-        return new KafkaNullConverter();
-    }
+    public static final String HEADER_KEY = "key";
+    public static final String HEADER_OFFSET = "key";
 
     @Bean
     Function<Message<Customer>, Message<?>> processCustomer() {

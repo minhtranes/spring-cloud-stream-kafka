@@ -1,3 +1,4 @@
+server.port: ${random.int[8080,9999]}
 spring.cloud:
     function.definition: produceCustomer;processCustomer;report;synchronize
     stream:
@@ -15,6 +16,8 @@ spring.cloud:
                             #group.instance.id: ${SYNCHRONIZER_GROUP_INSTANCE_ID:ins01}
                 report-in-0:
                     consumer:
+                        resetOffsets: true
+                        startOffset: earliest
                         configuration:
                             key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
                 processCustomer-in-0:
@@ -61,3 +64,4 @@ spring.cloud:
             produceCustomer-out-0:
                 destination: rd-customers
                 contentType: application/json
+logging.file.name: ./logs/cloud-kafka.log
