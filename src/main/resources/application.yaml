@@ -1,6 +1,6 @@
 server.port: ${random.int[8080,9999]}
 spring.cloud:
-    function.definition: produceCustomer;processCustomer;report;synchronize
+    function.definition: payment
     stream:
         default-binder: kafka
         kafka:
@@ -64,4 +64,9 @@ spring.cloud:
             produceCustomer-out-0:
                 destination: rd-customers
                 contentType: application/json
+            payment-in-0:
+                group: rd-researcher
+                destination: rd-payments
+                startOffset: latest                        
+                batch-mode: false
 logging.file.name: ./logs/cloud-kafka.log
