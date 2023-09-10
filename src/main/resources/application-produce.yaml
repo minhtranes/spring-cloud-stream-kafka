@@ -1,0 +1,22 @@
+spring.cloud:
+    function.definition: createCustomer
+    stream:
+        default-binder: kafka
+        kafka:
+            binder:
+                brokers: ${KAFKA_BOOTSTRAP_SERVERS:10.10.15.85:32092}
+                consumerProperties:
+                    max.poll.records: 5
+            bindings:
+                createCustomer-out-0:
+                    producer:
+                        configuration:
+                            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                        topic.properties:
+                            cleanup.policy: compact
+                            segment.ms: 300000 # 5 minutes
+                            segment.bytes: 1048576 # 1 MB
+        bindings:
+            createCustomer-out-0:
+                destination: customers
+                contentType: application/json
