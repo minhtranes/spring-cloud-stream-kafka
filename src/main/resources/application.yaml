@@ -6,6 +6,12 @@ spring.cloud:
         kafka:
             binder:
                 brokers: ${KAFKA_BOOTSTRAP_SERVERS:10.10.15.85:32092}
+                configuration:
+                    security.protocol: SSL
+                    ssl.truststore.location: X:/intodigital-dev/app/common/cacerts
+                    ssl.truststore.password: changeit
+#                    ssl.keystore.location: C:/apps/kafka/star_develop_svc_cluster_local.p12
+#                    ssl.keystore.password: ;ap9^[\;HP4~DDFC
                 consumerProperties:
                     max.poll.records: 5
             bindings:
